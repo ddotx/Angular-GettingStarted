@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { IProduct } from "./product";
+import { IProduct, Product } from "./product";
 import { ProductService } from "./product.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   templateUrl: './product-list.component.html',
@@ -24,11 +25,16 @@ export class ProductListComponent implements OnInit {
     this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
   }
 
-  filteredProducts: IProduct[] = [];
-  products: IProduct[] = [];
+  // filteredProducts: IProduct[] = [];
+  filteredProducts: Product[] = [];
+  // products: IProduct[] = [];
+  products: Product[] = [];
 
   //The class constructor is a function that is executed when the component is first initialized
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute
+    ) {
     //this.filteredProducts = this.products;
     //this.listFilter = 'cart';
   }
@@ -37,9 +43,9 @@ export class ProductListComponent implements OnInit {
     this.pageTitle = 'Product List: ' + message;
   }
 
-  performFilter(filterBy: string): IProduct[] {
+  performFilter(filterBy: string): Product[] {
     filterBy = filterBy.toLocaleLowerCase();
-    return this.products.filter((product: IProduct) =>
+    return this.products.filter((product: Product) =>
       product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
@@ -49,6 +55,9 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     // this.products = this.productService.getProducts();
+
+    this._listFilter = this.route.snapshot.queryParamMap.get('filterBy') || '';
+    this.showImage = this.route.snapshot.queryParamMap.get('showImage') === 'true';
 
     //! 1 - Call the subscribe method of the returned observable
     //! 2 - Provide a function to handle an emitted item (normally assigns a property to the returned JSON object)

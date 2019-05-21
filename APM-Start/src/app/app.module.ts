@@ -1,37 +1,33 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+
+/* Feature Modules*/
+import { ProductModule } from './products/product.module';
+import { UserModule } from './user/user.module';
+import { MessageModule } from './messages/message.module';
 
 import { AppComponent } from './app.component';
-import { ProductListComponent } from './products/product-list.component';
-import { ConvertToSpacesPipe } from './shared/convert-to-spaces.pipe';
-import { StarComponent } from './shared/star.component';
-import { ProductDetailComponent } from './products/product-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
-import { ProductDetailGuard } from './products/product-detail.guard';
+import { AppRoutingModule } from './app-routing.module';
+import { PageNotFoundComponent } from './page-not-found.component';
+
+
 
 @NgModule({
   declarations: [ //array
     AppComponent,
-    ProductListComponent,
-    ConvertToSpacesPipe,
-    StarComponent,
-    ProductDetailComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    PageNotFoundComponent,
+ 
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     HttpClientModule,
-    RouterModule.forRoot([
-      { path: 'products', component: ProductListComponent },
-      { path: 'product/:id', canActivate: [ProductDetailGuard], component: ProductDetailComponent},
-      { path: 'welcome', component: WelcomeComponent},
-      { path: '', redirectTo: 'welcome', pathMatch: 'full'},
-      { path: '**', redirectTo: 'welcome', pathMatch: 'full'}
-    ])
+    ProductModule, //==> Use Lazy Loading
+    UserModule,
+    AppRoutingModule,
+    MessageModule //! Order of Routing is important in term of path! ==> set wildcard route to the last
   ],
   bootstrap: [AppComponent]
 })
